@@ -13,6 +13,13 @@ final class ResolutionStore {
     struct Payload: Codable {
         var saved: [SavedResolution] = []
     }
+    private struct DefaultResolution: Codable {
+        let name: String
+        let width: Int
+        let height: Int
+        let tags: [String]?
+        let note: String?
+    }
 
     private let fileURL: URL
 
@@ -28,13 +35,35 @@ final class ResolutionStore {
 
         self.fileURL = folder.appendingPathComponent(fileName)
     }
+    
+    private func loadBundledDefaults() -> [SavedResolution] {
+        guard let url = Bundle.main.url(forResource: "presets", withExtension: "json") else {
+            return []
+        }
+        do {
+            let data = try Data(contentsOf: url)
+            let decoded = try JSONDecoder().decode([DefaultResolution].self, from: data)
+            return decoded.map {
+                SavedResolution(
+                    name: $0.name,
+                    width: $0.width,
+                    height: $0.height,
+                    tags: Set($0.tags ?? []),
+                    note: $0.note
+                )
+            }
+        } catch {
+            return []
+        }
+    }
 
     func load() -> Payload {
         do {
             let data = try Data(contentsOf: fileURL)
             return try JSONDecoder().decode(Payload.self, from: data)
         } catch {
-            return Payload() // first run or decode error -> start empty
+            let defaults = loadBundledDefaults()
+            return Payload(saved: defaults)
         }
     }
 

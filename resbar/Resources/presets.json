@@ -1,0 +1,8 @@
+[
+  { "name": "720p", "width": 1280, "height": 720,  "tags": ["16:9"] },
+  { "name": "1080p", "width": 1920, "height": 1080, "tags": ["16:9"] },
+  { "name": "1440p", "width": 2560, "height": 1440, "tags": ["16:9"] },
+  { "name": "4K UHD", "width": 3840, "height": 2160, "tags": ["16:9"] },
+  { "name": "IPhone 17 Pro Max", "width": 1320, "height": 2868, "tags": ["16:9","Device","Apple","Phone"] },
+  { "name": "IPhone 17 Pro", "width": 1206, "height": 2622, "tags": ["16:9","Device","Apple"] }
+]
